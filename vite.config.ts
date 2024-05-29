@@ -1,6 +1,25 @@
 import { defineConfig } from "vite";
 import uni from "@dcloudio/vite-plugin-uni";
 
+import postcssUrl from 'postcss-url';
+import path from 'path';
+
+const options = [
+  // { filter: '**/assets/copy/*.png', url: 'copy', assetsPath: 'img', useHash: true },
+  // { filter: '**/assets/inline/*.svg', url: 'inline' },
+  // { filter: '**/assets/**/*.gif', url: 'rebase' },
+  // using custom function to build url
+  {
+    filter: '**/*.*',
+    url: (asset) => {
+      console.log(asset);
+      return `https://cdn.url/${asset.url}`
+    },
+    multi: true
+  },
+  // { filter: '**/*.*', url: 'copy', assetsPath: 'img2', useHash: true, hashOptions: {append: true }},
+];
+
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
@@ -49,6 +68,13 @@ export default defineConfig({
     ) {
       // return publicPath + '/' + filename;
       return 'https://aliyun.dc1979.com/img/h5/' + filename
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [
+        postcssUrl(options)
+      ]
     },
   }
 });
